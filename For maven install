@@ -1,0 +1,27 @@
+pipeline { 
+    agent{ 
+     label { 
+      label "built-in" 
+        customWorkspace "/mnt/workspace" 
+    } 
+   } stages { 
+        stage('git-clone') { 
+          steps { 
+       sh "sudo rm -rf *" 
+        git credentialsId: 'git-token', url:       'https://github.com/ujvala/LoginWebApp.git' 
+  } 
+} 
+   stage("mvn-build"){ 
+     steps{ 
+        sh "sudo su -" 
+      sh "mvn --version" 
+     sh "mvn clean install"
+  } 
+  } 
+  stage("war-deploy"){ 
+     steps{
+    sh "cp /root/.jenkins/workspace/login/target/LoginWebApp.war /root/."
+}
+}
+}
+}
